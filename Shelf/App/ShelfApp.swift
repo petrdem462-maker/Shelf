@@ -2,7 +2,7 @@
 //  ShelfApp.swift
 //  Shelf
 //
-//  Created by Olha Nosova on 18.11.2026.
+//  Created by Petro Demchenko on 18.11.2026.
 //
 
 import SwiftUI
@@ -11,7 +11,7 @@ import SwiftUI
 struct ShelfApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
         }
     }
 }
