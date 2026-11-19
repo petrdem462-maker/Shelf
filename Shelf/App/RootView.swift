@@ -2,6 +2,8 @@
 import SwiftUI
 
 struct RootView: View {
+    let dependencies: AppDependencies
+    
     var body: some View {
         TabView{
             NavigationStack {
@@ -26,5 +28,5 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView()
+    RootView(dependencies: AppDependencies())
 }
