@@ -1,10 +1,3 @@
-//
-//  ShelfTests.swift
-//  ShelfTests
-//
-//  Created by Olha Nosova on 18.11.2026.
-//
-
 import Testing
 
 struct ShelfTests {
