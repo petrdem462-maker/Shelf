@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct ShelfApp: App {
+    private let dependencies = AppDependencies()
+    
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(dependencies: dependencies)
         }
     }
 }
