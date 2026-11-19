@@ -7,6 +7,14 @@ struct RootView: View {
             NavigationStack {
                 Text("Search goes here")
                     .navigationTitle("Search")
+                    .task {
+                        do {
+                            let response: SearchResponse = try await HTTPClient().get(.search(query: "dune", page: 1))
+                            print("✅ Found \(response.numFound) books. First: \(response.docs.first?.title ?? "none")")
+                        } catch {
+                            print("❌ \(error.localizedDescription)")
+                        }
+                    }
             }
             .tabItem {Label("Search", systemImage: "magnifyingglass")}
             
