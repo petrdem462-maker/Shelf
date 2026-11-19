@@ -23,7 +23,7 @@ final class SearchViewModel {
     func queryChanged() {
         searchTask?.cancel()
         let text = query.trimmingCharacters(in: .whitespaces)
-        guard text.count >= 1 else { state = .idle; return}
+        guard text.count >= 2 else { state = .idle; return}
         
         searchTask = Task {
             try? await Task.sleep(for: .milliseconds(400))

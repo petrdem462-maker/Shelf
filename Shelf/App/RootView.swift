@@ -7,10 +7,9 @@ struct RootView: View {
     var body: some View {
         TabView{
             NavigationStack {
-                Text("Search goes here")
-                    .navigationTitle("Search")
+                SearchView(api: dependencies.api)
             }
-            .tabItem {Label("Search", systemImage: "magnifyingglass")}
+            .tabItem { Label("Search", systemImage: "magnifyingglass") }
             
             NavigationStack {
                 Text("Here are your books")
