@@ -19,7 +19,7 @@ struct BookSummary: Decodable, Identifiable, Hashable, Sendable {
     
     func coverURL(size: String = "M") -> URL? {
         guard let coverID else {return nil}
-        return URL(string: "https://covers.openlibrary.org/b/id/\(coverID)-\(size).jpg")
+        return URL(string: "https://covers.openlibrary.org/b/id/\(coverID)-\(size).jpg")}
     
         enum CodingKeys: String, CodingKey {
             case key, title
@@ -28,7 +28,6 @@ struct BookSummary: Decodable, Identifiable, Hashable, Sendable {
             case coverID = "cover_i"
             case pageCount = "number_of_pages_median"
         }
-    }
 }
 
 
