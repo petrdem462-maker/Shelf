@@ -2,8 +2,10 @@ import SwiftUI
 
 struct SearchView: View {
     @State private var viewModel: SearchViewModel
+    private let api: BookAPI
     
     init(api: BookAPI) {
+        self.api = api
         _viewModel = State(initialValue: SearchViewModel(api: api))
     }
     
@@ -12,6 +14,9 @@ struct SearchView: View {
             .navigationTitle("Search")
             .searchable(text: $viewModel.query, prompt: "Title or author")
             .onChange(of: viewModel.query) { viewModel.queryChanged()}
+            .navigationDestination(for: BookSummary.self) {
+                book in BookDetailView(book: book, api: api)
+            }
     }
     
     @ViewBuilder
@@ -28,7 +33,9 @@ struct SearchView: View {
             ContentUnavailableView("Something went wrong", systemImage: "wifi.exclamationmark", description: Text(message))
         case .loaded(let books):
             List(books) { book in
-                BookRow(book: book)
+                NavigationLink(value: book) {
+                    BookRow(book: book)
+                }
             }
         }
     }
