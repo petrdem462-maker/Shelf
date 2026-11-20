@@ -29,4 +29,29 @@ struct DecodingTests {
         #expect(book.pageCount == nil)
         #expect(book.authorText == "Unknown author")
     }
+    
+    @Test func descriptionAsPlainString() throws {
+        let json = """
+        {"title": "Dune", "description": "A desert planet."}
+        """
+        let work = try JSONDecoder().decode(WorkDetail.self, from: Data(json.utf8))
+        #expect(work.description == "A desert planet.")
+    }
+
+    @Test func descriptionAsObject() throws {
+        let json = """
+        {"title": "Dune", "description": {"type": "/type/text", "value": "A desert planet."}}
+        """
+        let work = try JSONDecoder().decode(WorkDetail.self, from: Data(json.utf8))
+        #expect(work.description == "A desert planet.")
+    }
+
+    @Test func missingDescriptionAndSubjects() throws {
+        let json = """
+        {"title": "Dune"}
+        """
+        let work = try JSONDecoder().decode(WorkDetail.self, from: Data(json.utf8))
+        #expect(work.description == nil)
+        #expect(work.subjects.isEmpty)
+    }
 }
