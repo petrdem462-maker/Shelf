@@ -10,6 +10,7 @@ final class SavedBook {
     var pageCount: Int?
     var statusRaw: String
     var addedAt: Date
+    var finishedAt: Date?
     
     @Relationship(deleteRule: .cascade, inverse: \ReadingSession.book)
     var sessions: [ReadingSession] = []
@@ -31,3 +32,24 @@ final class SavedBook {
         set { statusRaw = newValue.rawValue }
     }
 }
+
+extension SavedBook {
+    var pagesRead: Int {
+        sessions.reduce(0) { $0 + $1.pages}
+    }
+    
+    var progress: Double? {
+        guard let total = pageCount, total > 0 else { return nil }
+        return min(Double(pagesRead) / Double(total), 1)
+    }
+    
+    var summary: BookSummary {
+        BookSummary(key: "/works/\(workID)", title: title, authorNames: [author], firstPublishYear: nil, coverID: coverID, pageCount: pageCount)
+    }
+    
+    var pagesLeft: Int? {
+            guard let total = pageCount else { return nil }
+            return max(total - pagesRead, 0)
+        }
+}
+
