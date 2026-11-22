@@ -1,16 +1,18 @@
 import SwiftUI
+import SwiftData
 
 struct BookDetailView: View {
     @State private var viewModel: BookDetailViewModel
 
-    init(book: BookSummary, api: BookAPI) {
-        _viewModel = State(initialValue: BookDetailViewModel(book: book, api: api))
+    init(book: BookSummary, api: BookAPI, library: LibraryRepository) {
+        _viewModel = State(initialValue: BookDetailViewModel(book: book, api: api, library: library))
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 header
+                libraryMenu
                 details
             }
             .padding()
@@ -29,7 +31,7 @@ struct BookDetailView: View {
             }
             .frame(width: 120, height: 180)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-
+            
             VStack(alignment: .leading, spacing: 6) {
                 Text(viewModel.book.title)
                     .font(.title2)
@@ -44,6 +46,32 @@ struct BookDetailView: View {
                 }
             }
         }
+        }
+    
+        private var libraryMenu: some View {
+            Menu {
+                ForEach(ReadingStatus.allCases, id: \.self) {
+                    status in Button {
+                        viewModel.setStatus(status)
+                    } label: {
+                        if viewModel.savedStatus == status {
+                            Label(status.title, systemImage: "checkmark")
+                        } else {
+                            Text(status.title)
+                        }
+                    }
+            }
+            if viewModel.savedStatus != nil {
+                Divider()
+                Button("Remove from library", role: .destructive) {
+                    viewModel.remove()
+                }
+            }
+        } label: {
+            Label(viewModel.savedStatus?.title ?? "Add to library", systemImage: viewModel.savedStatus == nil ? "plus.circle" : "books.vertical")
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
     }
 
     @ViewBuilder
@@ -87,11 +115,14 @@ struct BookDetailView: View {
 }
 
 #Preview {
+    let container = try! AppDatabase.makeContainer(inMemory: true)
     NavigationStack {
         BookDetailView(
             book: BookSummary(key: "/works/OL27482W", title: "The Hobbit",
                               authorNames: ["J.R.R. Tolkien"], firstPublishYear: 1937,
                               coverID: 14627509, pageCount: 310),
-            api: OpenLibraryAPI(client: HTTPClient()))
+            api: OpenLibraryAPI(client: HTTPClient()),
+            library: LibraryRepository(context: container.mainContext))
     }
+    .modelContainer(container)
 }

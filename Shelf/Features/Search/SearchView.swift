@@ -1,11 +1,14 @@
 import SwiftUI
+import SwiftData
 
 struct SearchView: View {
     @State private var viewModel: SearchViewModel
     private let api: BookAPI
-
-    init(api: BookAPI) {
+    private let library: LibraryRepository
+    
+    init(api: BookAPI, library: LibraryRepository) {
         self.api = api
+        self.library = library
         _viewModel = State(initialValue: SearchViewModel(api: api))
     }
 
@@ -15,7 +18,7 @@ struct SearchView: View {
             .searchable(text: $viewModel.query, prompt: "Title or author")
             .onChange(of: viewModel.query) { viewModel.queryChanged() }
             .navigationDestination(for: BookSummary.self) { book in
-                BookDetailView(book: book, api: api)
+                BookDetailView(book: book, api: api, library: library)
             }
     }
 
@@ -43,7 +46,9 @@ struct SearchView: View {
 }
 
 #Preview {
+    let container = try! AppDatabase.makeContainer(inMemory: true)
     NavigationStack {
-        SearchView(api: OpenLibraryAPI(client: HTTPClient()))
+        SearchView(api: OpenLibraryAPI(client: HTTPClient()), library: LibraryRepository(context: container.mainContext))
     }
+    .modelContainer(container)
 }
