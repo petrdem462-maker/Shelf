@@ -1,6 +1,10 @@
 import Foundation
 import SwiftData
 
+enum LibraryError: Error {
+    case invalidPages
+}
+
 @MainActor
 final class LibraryRepository {
     private let context: ModelContext
@@ -42,6 +46,21 @@ final class LibraryRepository {
     
     func delete(_ book: SavedBook) throws {
         context.delete(book)
+        try context.save()
+    }
+    
+    func logSession(for book: SavedBook, pages: Int, date: Date = .now) throws {
+        guard pages > 0 else {
+            throw LibraryError.invalidPages
+        }
+        
+        let session = ReadingSession(date: date, pages: pages)
+        context.insert(session)
+        session.book = book
+        
+        if book.status == .wantToRead {
+            book.status = .reading
+        }
         try context.save()
     }
 }

@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct LibraryView: View {
+    @State private var loggingBook: SavedBook?
     @State private var viewModel: LibraryViewModel
     private let api: BookAPI
     private let library: LibraryRepository
@@ -29,6 +30,11 @@ struct LibraryView: View {
         }
         .task(id: viewModel.selectedStatus) { viewModel.load() }
         .onAppear { viewModel.load() }
+        .sheet(item: $loggingBook) { book in
+            LogSessionSheet(book: book) { pages in
+                viewModel.logSession(for: book, pages: pages)
+            }
+        }
     }
     
     @ViewBuilder
@@ -43,6 +49,14 @@ struct LibraryView: View {
                 .swipeActions {
                     Button("Delete", role: .destructive) {
                         viewModel.delete(book)
+                    }
+                }
+                .swipeActions(edge: .leading) {
+                    if book.status != .finished {
+                        Button("Log pages") {
+                            loggingBook = book
+                        }
+                        .tint(.blue)
                     }
                 }
             }

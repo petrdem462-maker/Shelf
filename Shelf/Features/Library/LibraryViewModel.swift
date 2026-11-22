@@ -21,4 +21,9 @@ final class LibraryViewModel {
         try? library.delete(book)
         load()
     }
+    
+    func logSession(for book: SavedBook, pages: Int) {
+            try? library.logSession(for: book, pages: pages)
+            load()
+    }
 }
