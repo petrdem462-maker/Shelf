@@ -21,9 +21,10 @@ final class LibraryRepository {
     
     func books(with status: ReadingStatus) throws -> [SavedBook] {
         let raw = status.rawValue
-        let descriptor = FetchDescriptor<SavedBook>(
+        var descriptor = FetchDescriptor<SavedBook>(
             predicate: #Predicate { $0.statusRaw == raw },
             sortBy: [SortDescriptor(\.addedAt, order: .reverse)])
+        descriptor.relationshipKeyPathsForPrefetching = [\.sessions]
         return try context.fetch(descriptor)
     }
     

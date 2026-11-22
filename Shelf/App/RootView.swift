@@ -12,8 +12,7 @@ struct RootView: View {
             .tabItem { Label("Search", systemImage: "magnifyingglass") }
             
             NavigationStack {
-                Text("Here are your books")
-                    .navigationTitle("Library")
+                LibraryView(api: dependencies.api, library: dependencies.library)
             }
             .tabItem {Label("Library", systemImage: "books.vertical")}
             
