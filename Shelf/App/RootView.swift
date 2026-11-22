@@ -17,10 +17,9 @@ struct RootView: View {
             .tabItem {Label("Library", systemImage: "books.vertical")}
             
             NavigationStack {
-                Text("Here are your stats")
-                    .navigationTitle("Stats")
+                StatsView(library: dependencies.library)
             }
-            .tabItem {Label("Stats", systemImage: "chart.bar")}
+            .tabItem { Label("Stats", systemImage: "chart.bar") }
         }
     }
 }
