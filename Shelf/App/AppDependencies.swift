@@ -5,6 +5,7 @@ import SwiftData
 final class AppDependencies {
     let api: BookAPI = OpenLibraryAPI(client: HTTPClient())
     let container: ModelContainer
+    let library: LibraryRepository
     
     init() {
         do{
@@ -12,5 +13,6 @@ final class AppDependencies {
         } catch {
             fatalError("Could not create database: \(error)")
         }
+        library = LibraryRepository(context: container.mainContext)
     }
 }
