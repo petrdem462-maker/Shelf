@@ -3,6 +3,7 @@ import SwiftData
 
 enum LibraryError: Error {
     case invalidPages
+    case tooManyPages
 }
 
 @MainActor
@@ -14,12 +15,14 @@ final class LibraryRepository {
     }
     
     func save(_ summary: BookSummary, status: ReadingStatus) throws {
-        if let existing = try book(id: summary.workID) {
-            existing.status = status
+        let book: SavedBook
+        if let existing = try self.book(id: summary.workID) {
+            book = existing
         } else {
-            let book = SavedBook(workID: summary.workID, title: summary.title, author: summary.authorText, coverID: summary.coverID, pageCount: summary.pageCount, status: status)
+            book = SavedBook(workID: summary.workID, title: summary.title, author: summary.authorText, coverID: summary.coverID, pageCount: summary.pageCount, status: status)
             context.insert(book)
         }
+        setStatus(status, on: book)
         try context.save()
     }
     
@@ -40,8 +43,13 @@ final class LibraryRepository {
     }
     
     func updateStatus(of book: SavedBook, to status: ReadingStatus) throws {
-        book.status = status
+        setStatus(status, on: book)
         try context.save()
+    }
+    
+    private func setStatus(_ status: ReadingStatus, on book: SavedBook)  {
+        book.status = status
+        book.finishedAt = status == .finished ? .now : nil
     }
     
     func delete(_ book: SavedBook) throws {
@@ -58,8 +66,10 @@ final class LibraryRepository {
         context.insert(session)
         session.book = book
         
-        if book.status == .wantToRead {
-            book.status = .reading
+        if book.pagesLeft == 0 {
+            setStatus(.finished, on: book)
+        } else if book.status == .wantToRead {
+            setStatus(.reading, on: book)
         }
         try context.save()
     }

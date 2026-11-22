@@ -3,6 +3,7 @@ import SwiftUI
 struct LogSessionSheet: View {
     let book: SavedBook
     let onSave: (Int) -> Void
+    private var maxPages: Int { book.pagesLeft ?? 2000 }
 
     @State private var pages = 10
     @Environment(\.dismiss) private var dismiss
@@ -13,9 +14,13 @@ struct LogSessionSheet: View {
                 Section {
                     TextField("Pages", value: $pages, format: .number)
                         .keyboardType(.numberPad)
-                    Stepper("Adjust", value: $pages, in: 0...2000)
+                    Stepper("Adjust", value: $pages, in: 0...maxPages)
                 } footer: {
-                    Text("Pages read today in \(book.title)")
+                    if let left = book.pagesLeft {
+                        Text("\(left) pages left in \(book.title)")
+                    } else {
+                        Text("Pages read today in \(book.title)")
+                    }
                 }
             }
             .navigationTitle("Log reading")
@@ -29,7 +34,7 @@ struct LogSessionSheet: View {
                         onSave(pages)
                         dismiss()
                     }
-                    .disabled(pages == 0)
+                    .disabled(pages == 0 || pages > maxPages)
                 }
             }
         }
