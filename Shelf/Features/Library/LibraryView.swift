@@ -2,15 +2,16 @@ import SwiftUI
 import SwiftData
 
 struct LibraryView: View {
-    @State private var loggingBook: SavedBook?
     @State private var viewModel: LibraryViewModel
+    @State private var loggingBook: SavedBook?
     private let api: BookAPI
+    
     private let library: LibraryRepository
     
     init(api: BookAPI, library: LibraryRepository) {
         self.api = api
         self.library = library
-        _viewModel = State(initialValue: LibraryViewModel(library: library))
+        _viewModel = State(initialValue: LibraryViewModel(api: api, library: library))
     }
     var body: some View {
         VStack(spacing: 0) {
