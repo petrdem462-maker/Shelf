@@ -14,5 +14,6 @@ final class AppDependencies {
             fatalError("Could not create database: \(error)")
         }
         library = LibraryRepository(context: container.mainContext)
+        print(container.configurations.first?.url.path ?? "no store")
     }
 }
