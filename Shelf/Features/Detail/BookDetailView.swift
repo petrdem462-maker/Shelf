@@ -24,14 +24,10 @@ struct BookDetailView: View {
 
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
-            AsyncImage(url: viewModel.book.coverURL(size: "L")) { image in
-                image.resizable().scaledToFill()
-            } placeholder: {
-                Color.secondary.opacity(0.2)
-            }
-            .frame(width: 120, height: 180)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            
+            CoverImageView(url: viewModel.book.coverURL(size: "L"))
+                .frame(width: 120, height: 180)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+
             VStack(alignment: .leading, spacing: 6) {
                 Text(viewModel.book.title)
                     .font(.title2)
@@ -46,7 +42,7 @@ struct BookDetailView: View {
                 }
             }
         }
-        }
+    }
     
         private var libraryMenu: some View {
             Menu {

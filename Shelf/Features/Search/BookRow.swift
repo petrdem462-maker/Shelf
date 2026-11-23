@@ -5,13 +5,10 @@ struct BookRow: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            AsyncImage(url: book.coverURL(size: "S")){
-                image in image.resizable().scaledToFill()
-            } placeholder: {
-                Color.secondary.opacity(0.2)
-            }
-            .frame(width: 44, height: 66)
-            .clipShape(RoundedRectangle(cornerRadius: 4))
+            CoverImageView(url: book.coverURL(size: "S"))
+                            .frame(width: 44, height: 66)
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+            
             VStack(alignment: .leading, spacing: 4) {
                 Text(book.title)
                     .font(.headline)
