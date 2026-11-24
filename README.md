@@ -1,10 +1,10 @@
 #Shelf
 Shelf is an app for creating your own digit library, where you can search for books, save them, and keep track of your stats.
 <p>
-  <img src="docs/Screenshots/default_search.png" width="200" alt="Search start screen">
-  <img src="docs/Screenshots/active_search.png" width="200" alt="Search results">
-  <img src="docs/Screenshots/library.png" width="200" alt="Library">
-  <img src="docs/Screenshots/stats.png" width="200" alt="Stats">
+  <img src="Screenshots/default_search.png" width="200" alt="Search start screen">
+  <img src="Screenshots/active_search.png" width="200" alt="Search results">
+  <img src="Screenshots/library.png" width="200" alt="Library">
+  <img src="Screenshots/stats.png" width="200" alt="Stats">
 </p>
 ## Features
 
