@@ -28,7 +28,7 @@ actor ImageCache {
         inFlight[url] = task
         defer { inFlight[url] = nil }
 
-        let image = try await task.value                    // 3. actor is free while waiting
+        let image = try await task.value                    
         cache.setObject(image, forKey: url as NSURL)
         return image
     }
